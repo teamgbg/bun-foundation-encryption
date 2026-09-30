@@ -9,6 +9,19 @@
 
 import { describe, expect, test, beforeEach, mock } from "bun:test";
 import { __resetCredentialFieldsCacheForTest } from "./write-boundary.ts";
+import { configure } from "./configure.ts";
+
+// A TEST CARRIES ITS OWN FIXTURE CREDENTIAL — never whatever the machine
+// exports. This suite exercises the real cipher, so it needs a real key, and
+// the key must be the same everywhere it runs: measured 2026-09-30, with the
+// key borrowed from the developer's shell the file was green on a
+// workstation and red in the compile container (5 of 12 failed, every
+// encrypt() throwing "Encryption key not configured" from constants.ts) —
+// ambient state is not a fixture. The bootloader's own injection path
+// (configure), not the env fallback, so the suite depends on nothing outside
+// its own module body; the value is inert hex ("dead" × 16 = 64 chars) and
+// guards nothing but this suite's determinism.
+configure({ encryptionKeyHex: "dead".repeat(16) });
 
 const REGISTRY_MODULE = "@teamscala/db/registry/config.ts";
 
