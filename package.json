@@ -1,114 +1,58 @@
 {
-  "_generated": {
-    "system": "package-json@1.0.0",
-    "status": "generated",
-    "edit": "edit src/ — dependencies and exports derive from imports; everything else preserved"
-  },
-  "name": "@teamscala/encryption",
-  "capability": "Encryption helpers: symmetric crypto, field-level encryption, Prisma extension. The single sanctioned encryption surface.",
-  "tier": "foundation",
-  "type": "module",
-  "version": "0.3.93",
-  "description": "Encryption helpers: symmetric crypto, field-level encryption, Prisma extension. The single sanctioned encryption surface.",
-  "imports": {
-    "#encryption/*": "./src/*",
-    "#encryption/*.ts": "./src/*.ts"
-  },
-  "files": [
-    "src"
-  ],
-  "dependencies": {
-    "@teamscala/cache": "*"
-  },
-  "devDependencies": {
-    "bun-types": "*",
-    "@happy-dom/global-registrator": "*",
-    "@testing-library/react": "*"
-  },
-  "exports": {
-    "./configure": {
-      "types": "./src/configure.d.ts",
-      "default": "./src/configure.ts"
-    },
-    "./configure.ts": {
-      "types": "./src/configure.d.ts",
-      "default": "./src/configure.ts"
-    },
-    "./crypto/constants": {
-      "types": "./src/crypto/constants.d.ts",
-      "default": "./src/crypto/constants.ts"
-    },
-    "./crypto/constants.ts": {
-      "types": "./src/crypto/constants.d.ts",
-      "default": "./src/crypto/constants.ts"
-    },
-    "./crypto/decrypt": {
-      "types": "./src/crypto/decrypt.d.ts",
-      "default": "./src/crypto/decrypt.ts"
-    },
-    "./crypto/decrypt.ts": {
-      "types": "./src/crypto/decrypt.d.ts",
-      "default": "./src/crypto/decrypt.ts"
-    },
-    "./crypto/decrypt-api-key": {
-      "types": "./src/crypto/decrypt-api-key.d.ts",
-      "default": "./src/crypto/decrypt-api-key.ts"
-    },
-    "./crypto/decrypt-api-key.ts": {
-      "types": "./src/crypto/decrypt-api-key.d.ts",
-      "default": "./src/crypto/decrypt-api-key.ts"
-    },
-    "./crypto/encrypt": {
-      "types": "./src/crypto/encrypt.d.ts",
-      "default": "./src/crypto/encrypt.ts"
-    },
-    "./crypto/encrypt.ts": {
-      "types": "./src/crypto/encrypt.d.ts",
-      "default": "./src/crypto/encrypt.ts"
-    },
-    "./crypto/is-encrypted": {
-      "types": "./src/crypto/is-encrypted.d.ts",
-      "default": "./src/crypto/is-encrypted.ts"
-    },
-    "./crypto/is-encrypted.ts": {
-      "types": "./src/crypto/is-encrypted.d.ts",
-      "default": "./src/crypto/is-encrypted.ts"
-    },
-    "./crypto/secret-config": {
-      "types": "./src/crypto/secret-config.d.ts",
-      "default": "./src/crypto/secret-config.ts"
-    },
-    "./crypto/secret-config.ts": {
-      "types": "./src/crypto/secret-config.d.ts",
-      "default": "./src/crypto/secret-config.ts"
-    },
-    "./extension": {
-      "types": "./src/extension.d.ts",
-      "default": "./src/extension.ts"
-    },
-    "./extension.ts": {
-      "types": "./src/extension.d.ts",
-      "default": "./src/extension.ts"
-    },
-    "./fields": {
-      "types": "./src/fields.d.ts",
-      "default": "./src/fields.ts"
-    },
-    "./fields.ts": {
-      "types": "./src/fields.d.ts",
-      "default": "./src/fields.ts"
-    },
-    "./write-boundary": {
-      "types": "./src/write-boundary.d.ts",
-      "default": "./src/write-boundary.ts"
-    },
-    "./write-boundary.ts": {
-      "types": "./src/write-boundary.d.ts",
-      "default": "./src/write-boundary.ts"
-    }
-  },
-  "repository": "https://github.com/teamgbg/bun-foundation-encryption",
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org"
-  }
+	"_generated": {
+		"system": "encryption",
+		"status": "generated",
+		"edit": "edit src/ — dependencies and exports derive from imports; everything else preserved"
+	},
+	"name": "@teamscala/encryption",
+	"capability": "Encryption helpers: symmetric crypto, field-level encryption, Prisma extension. The single sanctioned encryption surface.",
+	"tier": "foundation",
+	"type": "module",
+	"version": "0.3.93",
+	"description": "Encryption helpers: symmetric crypto, field-level encryption, Prisma extension. The single sanctioned encryption surface.",
+	"imports": {
+		"#encryption/*": "./src/*",
+		"#encryption/*.ts": "./src/*.ts"
+	},
+	"files": [
+		"src"
+	],
+	"dependencies": {
+		"@teamscala/cache": "*"
+	},
+	"devDependencies": {
+		"bun-types": "*",
+		"@happy-dom/global-registrator": "*",
+		"@testing-library/react": "*"
+	},
+	"exports": {
+		"./configure": "./src/configure.ts",
+		"./configure.ts": "./src/configure.ts",
+		"./crypto/constants": "./src/crypto/constants.ts",
+		"./crypto/constants.ts": "./src/crypto/constants.ts",
+		"./crypto/decrypt": "./src/crypto/decrypt.ts",
+		"./crypto/decrypt.ts": "./src/crypto/decrypt.ts",
+		"./crypto/decrypt-api-key": "./src/crypto/decrypt-api-key.ts",
+		"./crypto/decrypt-api-key.ts": "./src/crypto/decrypt-api-key.ts",
+		"./crypto/encrypt": "./src/crypto/encrypt.ts",
+		"./crypto/encrypt.ts": "./src/crypto/encrypt.ts",
+		"./crypto/is-encrypted": "./src/crypto/is-encrypted.ts",
+		"./crypto/is-encrypted.ts": "./src/crypto/is-encrypted.ts",
+		"./crypto/looks-sealed": "./src/crypto/looks-sealed.ts",
+		"./crypto/looks-sealed.ts": "./src/crypto/looks-sealed.ts",
+		"./crypto/secret-config": "./src/crypto/secret-config.ts",
+		"./crypto/secret-config.ts": "./src/crypto/secret-config.ts",
+		"./crypto/unseal-secret-value": "./src/crypto/unseal-secret-value.ts",
+		"./crypto/unseal-secret-value.ts": "./src/crypto/unseal-secret-value.ts",
+		"./extension": "./src/extension.ts",
+		"./extension.ts": "./src/extension.ts",
+		"./fields": "./src/fields.ts",
+		"./fields.ts": "./src/fields.ts",
+		"./write-boundary": "./src/write-boundary.ts",
+		"./write-boundary.ts": "./src/write-boundary.ts"
+	},
+	"repository": "https://github.com/teamgbg/bun-foundation-encryption",
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org"
+	}
 }
