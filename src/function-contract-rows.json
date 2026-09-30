@@ -1,0 +1,166 @@
+{
+  "suite": {
+    "target": "src/function-contract-rows.json"
+  },
+  "rows": [
+    {
+      "args": [
+        null
+      ],
+      "note": "Total, and it never throws: an absent value (null, undefined, or empty) classifies as NOT sealed, so it is plaintext by definition rather than an error. The wall's own comment makes the same call from the other side - an invalid-base64 token is plaintext, so the trigger fires a clean refusal instead of an accidental 22P02.",
+      "expect": false,
+      "export": "looksSealed",
+      "module": "src/crypto/looks-sealed",
+      "package": "@teamscala/encryption",
+      "suite_type": "function_call",
+      "slug": "sealed-shape-absent-is-not-sealed"
+    },
+    {
+      "args": [
+        {
+          "$str": "ArJJlU0TrINTWtjGkKVlLBWMr+eJUg9m1L4SMoScapmz8mHfdce2GNngWzecQ943DMU="
+        }
+      ],
+      "note": "A value the platform's own sealer produced classifies sealed. This is the arm the whole reader rests on: isEncrypted cannot express it, because it answers 'does it decrypt' and so answers false under a wrong key.",
+      "expect": true,
+      "export": "looksSealed",
+      "module": "src/crypto/looks-sealed",
+      "package": "@teamscala/encryption",
+      "suite_type": "function_call",
+      "slug": "sealed-shape-an-envelope-classifies-sealed"
+    },
+    {
+      "args": [
+        {
+          "$str": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8"
+        }
+      ],
+      "note": "MEASURED against the database's own secret_token_sealed_shape(text), 2026-09-30: lower_hex=true -> EXEMPT. The kellnr supplier credential, plaintext that merely has an envelope-like length. The hex exemption runs FIRST and alone, because 48 hex chars satisfy every other clause.",
+      "expect": false,
+      "export": "looksSealed",
+      "module": "src/crypto/looks-sealed",
+      "package": "@teamscala/encryption",
+      "suite_type": "function_call",
+      "slug": "sealed-shape-lowercase-hex-is-a-supplier-token"
+    },
+    {
+      "args": [
+        "A1B2C3D4E5F6A7B8C9D0E1F2A3B4C5D6E7F8A9B0C1D2E3F4A5B6C7D8"
+      ],
+      "note": "Total, and it never throws: any input classifies, so a malformed value is plaintext BY DEFINITION rather than an error. The wall's own comment makes the same call from the other side - an invalid-base64 token is plaintext, so the trigger fires a clean refusal instead of an accidental 22P02.",
+      "expect": true,
+      "export": "looksSealed",
+      "module": "src/crypto/looks-sealed",
+      "package": "@teamscala/encryption",
+      "suite_type": "function_call",
+      "slug": "sealed-shape-uppercase-hex-classifies-sealed"
+    },
+    {
+      "env": {
+        "ENCRYPTION_KEY": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "args": [
+        {
+          "$str": "object-storage-credentials"
+        },
+        {
+          "$map": {
+            "ty": "std::collections::BTreeMap<String, String>",
+            "entries": [
+              [
+                "accessKeyId",
+                "PLAINTEXTKEY"
+              ],
+              [
+                "secretAccessKey",
+                "ArJJlU0TrINTWtjGkKVlLBWMr+eJUg9m1L4SMoScapmz8mHfdce2GNngWzecQ943DMU="
+              ]
+            ]
+          }
+        }
+      ],
+      "note": "PER-FIELD, NOT TOKEN-ALONE - the class the old reader missed. Four non-token secret rows hold sealed values that a token-only reader never reached. The plaintext field survives; the refused field is DROPPED so the consumer's schema sees it absent and takes its declared fallback. One plaintext + one sealed, so the expectation is unambiguous. The module is unseal-secret-value.ts, not unseal-secret-config.ts: both exports live in the one file.",
+      "expect": {
+        "$map": {
+          "ty": "std::collections::BTreeMap<String, String>",
+          "entries": [
+            [
+              "accessKeyId",
+              "PLAINTEXTKEY"
+            ]
+          ]
+        }
+      },
+      "export": "unsealSecretConfig",
+      "module": "src/crypto/unseal-secret-value",
+      "package": "@teamscala/encryption",
+      "suite_type": "function_call",
+      "slug": "unseal-a-config-opens-every-field-and-drops-a-refused-one"
+    },
+    {
+      "args": [
+        {
+          "$str": "object-storage-credentials"
+        },
+        {
+          "$str": "accessKeyId"
+        },
+        {
+          "$str": "PLAINTEXTKEY"
+        }
+      ],
+      "note": "A field that was never sealed passes through untouched. A `secret` ROW IS NOT A CREDENTIAL: the row is the at-rest envelope, and a genuinely-unsealed local setup must keep working through the same reader.",
+      "expect": {
+        "$str": "PLAINTEXTKEY"
+      },
+      "export": "unsealSecretValue",
+      "module": "src/crypto/unseal-secret-value",
+      "package": "@teamscala/encryption",
+      "suite_type": "function_call",
+      "slug": "unseal-a-plaintext-field-passes-through"
+    },
+    {
+      "env": {
+        "ENCRYPTION_KEY": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "args": [
+        {
+          "$str": "object-storage-credentials"
+        },
+        {
+          "$str": "secretAccessKey"
+        },
+        {
+          "$str": "ArJJlU0TrINTWtjGkKVlLBWMr+eJUg9m1L4SMoScapmz8mHfdce2GNngWzecQ943DMU="
+        }
+      ],
+      "note": "THE ARM THE INCIDENT DEPENDED ON. Sealed under one key, read under another: the value carries the platform's sealed shape but does not open, so it is REFUSED and reported ABSENT - never spent as a credential. Returning the envelope is what made every /api/assets/* URL 404 while 1000+ objects sat present in the bucket. An absent credential fails loudly; a spent one fails as 'not found'.",
+      "expect": null,
+      "export": "unsealSecretValue",
+      "module": "src/crypto/unseal-secret-value",
+      "package": "@teamscala/encryption",
+      "suite_type": "function_call",
+      "slug": "unseal-a-sealed-value-that-will-not-open-is-refused-not-spent"
+    },
+    {
+      "args": [
+        {
+          "$str": "object-storage-credentials"
+        },
+        {
+          "$str": "secretAccessKey"
+        },
+        {
+          "$str": ""
+        }
+      ],
+      "note": "EMPTY IS ABSENT, not a credential. Found by a vector, not by inspection: returning \"\" handed the consumer a schema failure about an empty field instead of naming the missing credential. The seal wall's own migration states the reader contract - every reader treats empty as absent.",
+      "expect": null,
+      "export": "unsealSecretValue",
+      "module": "src/crypto/unseal-secret-value",
+      "package": "@teamscala/encryption",
+      "suite_type": "function_call",
+      "slug": "unseal-empty-is-absent-not-a-credential"
+    }
+  ]
+}
