@@ -1,16 +1,15 @@
 /**
  * @system core-encryption
- * @status handwritten
+ * @status handwritten — none derivable: encryptSecretConfig is the WRITER half
+ *   (the seal verb's vocabulary), decryptSecretConfig a named delegate to
+ *   unsealSecretConfig; no generator emits either.
  * @edit edit directly
- *
- * Encrypts/decrypts the token field in registry secret configs.
- * Used by registry_edit (writer) and load-secret (reader) to keep
- * secret tokens encrypted at rest in the registry_entries JSONB.
+ * Writer and reader of the sealed `token` field in registry secret configs.
  */
 
-import { decrypt } from "./decrypt";
 import { encrypt } from "./encrypt";
 import { isEncrypted } from "./is-encrypted";
+import { unsealSecretConfig } from "./unseal-secret-value.ts";
 
 export interface SecretConfigLike {
 	token?: string;
@@ -28,15 +27,16 @@ export function encryptSecretConfig(
 	return config;
 }
 
+/**
+ * The READER half, no longer token-only: it USED to open `token` alone and by
+ * DECRYPT-PROBE, which under a key the process does not hold answers false and
+ * has the caller spend the envelope — the 2026-09-30 blank-asset path. Four
+ * non-token rows hold sealed values it never reached. Now a named delegate to
+ * `unsealSecretConfig`, so all 61 workspace call sites get shape-first,
+ * every-field, fail-closed behaviour from this one line.
+ */
 export function decryptSecretConfig(
 	config: SecretConfigLike,
 ): SecretConfigLike {
-	if (config.token && isEncrypted(config.token)) {
-		try {
-			return { ...config, token: decrypt(config.token) };
-		} catch {
-			return config;
-		}
-	}
-	return config;
+	return unsealSecretConfig("secret-row", config as Record<string, unknown>) as SecretConfigLike;
 }
