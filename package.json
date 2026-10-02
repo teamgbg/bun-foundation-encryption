@@ -8,7 +8,7 @@
 	"capability": "Encryption helpers: symmetric crypto, field-level encryption, Prisma extension. The single sanctioned encryption surface.",
 	"tier": "foundation",
 	"type": "module",
-	"version": "0.3.93",
+	"version": "0.3.101",
 	"description": "Encryption helpers: symmetric crypto, field-level encryption, Prisma extension. The single sanctioned encryption surface.",
 	"imports": {
 		"#encryption/*": "./src/*",
